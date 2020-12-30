@@ -9,13 +9,13 @@ namespace ConvenientChests.CategorizeChests.Interface.Widgets
     /// </summary>
     class Label : Widget
     {
-        private string _Text;
+        private string _text;
         public string Text
         {
-            get => _Text;
+            get => _text;
             set
             {
-                _Text = value;
+                _text = value;
                 RecalculateDimensions();
             }
         }

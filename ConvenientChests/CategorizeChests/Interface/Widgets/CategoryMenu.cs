@@ -18,7 +18,7 @@ namespace ConvenientChests.CategorizeChests.Interface.Widgets {
 
         // pagination
         protected int Row      { get; set; }
-        protected int numItems => ActiveCategory == "" ? 0 : ItemDataManager.Categories[ActiveCategory].Count;
+        protected int NumItems => ActiveCategory == "" ? 0 : ItemDataManager.Categories[ActiveCategory].Count;
 
         // Elements
         private Widget                  Body            { get; set; }
@@ -123,10 +123,10 @@ namespace ConvenientChests.CategorizeChests.Interface.Widgets {
 
             ScrollBar.Position = new Point(Width - 64 - 3 * 4, CloseButton.Height);
             ScrollBar.Height   = Height - CloseButton.Height - 16;
-            ScrollBar.Visible  = numItems > MaxItemsPage;
+            ScrollBar.Visible  = NumItems > MaxItemsPage;
 
             ScrollBar.ScrollPosition = 0;
-            ScrollBar.ScrollMax      = numItems;
+            ScrollBar.ScrollMax      = NumItems;
             ScrollBar.Step           = MaxItemsPage;
         }
 

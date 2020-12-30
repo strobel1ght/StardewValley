@@ -14,19 +14,19 @@ namespace ConvenientChests.CategorizeChests.Interface.Widgets
     /// </summary>
     public class Widget : IDisposable
     {
-        Widget _Parent;
+        Widget _parent;
         public Widget Parent
         {
-            get => _Parent;
+            get => _parent;
             set
             {
-                _Parent = value;
+                _parent = value;
                 OnParent(value);
             }
         }
 
-        List<Widget> _Children = new List<Widget>();
-        public IEnumerable<Widget> Children => _Children;
+        List<Widget> _children = new List<Widget>();
+        public IEnumerable<Widget> Children => _children;
 
         public Point Position { get; set; }
 
@@ -42,24 +42,24 @@ namespace ConvenientChests.CategorizeChests.Interface.Widgets
             set { Position = new Point(Position.X, value); }
         }
 
-        int _Width;
+        int _width;
         public int Width
         {
-            get => _Width;
+            get => _width;
             set
             {
-                _Width = value;
+                _width = value;
                 OnDimensionsChanged();
             }
         }
 
-        int _Height;
+        int _height;
         public int Height
         {
-            get { return _Height; }
+            get { return _height; }
             set
             {
-                _Height = value;
+                _height = value;
                 OnDimensionsChanged();
             }
         }
@@ -183,7 +183,7 @@ namespace ConvenientChests.CategorizeChests.Interface.Widgets
         public T AddChild<T>(T child) where T : Widget
         {
             child.Parent = this;
-            _Children.Add(child);
+            _children.Add(child);
 
             OnContentsChanged();
 
@@ -192,7 +192,7 @@ namespace ConvenientChests.CategorizeChests.Interface.Widgets
 
         public void RemoveChild(Widget child)
         {
-            _Children.Remove(child);
+            _children.Remove(child);
             child.Parent = null;
 
             OnContentsChanged();
@@ -210,7 +210,7 @@ namespace ConvenientChests.CategorizeChests.Interface.Widgets
                 child.Parent = null;
             }
 
-            _Children.RemoveAll(shouldRemove);
+            _children.RemoveAll(shouldRemove);
 
             OnContentsChanged();
         }

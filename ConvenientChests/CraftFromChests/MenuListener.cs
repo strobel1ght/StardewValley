@@ -8,7 +8,7 @@ namespace ConvenientChests.CraftFromChests {
     public class MenuListener {
         public static readonly int CraftingMenuTab = Constants.TargetPlatform == GamePlatform.Android ? 3 : GameMenu.craftingTab;
         
-        private readonly IModEvents Events;
+        private readonly IModEvents _events;
 
         public event EventHandler GameMenuShown;
         public event EventHandler GameMenuClosed;
@@ -16,17 +16,17 @@ namespace ConvenientChests.CraftFromChests {
         public event EventHandler CraftingMenuClosed;
 
         public MenuListener(IModEvents events) {
-            this.Events = events;
+            _events = events;
         }
 
         public void RegisterEvents() {
             ModEntry.Log("Register");
-            this.Events.Display.MenuChanged += OnMenuChanged;
+            _events.Display.MenuChanged += OnMenuChanged;
         }
 
         public void UnregisterEvents() {
             ModEntry.Log("UnRegister");
-            this.Events.Display.MenuChanged -= OnMenuChanged;
+            _events.Display.MenuChanged -= OnMenuChanged;
         }
 
         /// <summary>Raised after a game menu is opened, closed, or replaced.</summary>
@@ -53,7 +53,7 @@ namespace ConvenientChests.CraftFromChests {
             switch (e.NewMenu) {
                 case GameMenu _:
                     GameMenuShown?.Invoke(sender, e);
-                    this.Events.Display.RenderedActiveMenu += OnRenderedActiveMenu;
+                    _events.Display.RenderedActiveMenu += OnRenderedActiveMenu;
                     break;
 
                 case CraftingPage _:
@@ -104,7 +104,7 @@ namespace ConvenientChests.CraftFromChests {
         }
 
         private void UnregisterTabEvent() {
-            this.Events.Display.RenderedActiveMenu -= OnRenderedActiveMenu;
+            _events.Display.RenderedActiveMenu -= OnRenderedActiveMenu;
             _previousTab                           =  -1;
         }
     }

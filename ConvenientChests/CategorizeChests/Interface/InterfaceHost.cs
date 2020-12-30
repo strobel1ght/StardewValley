@@ -18,16 +18,16 @@ namespace ConvenientChests.CategorizeChests.Interface
         ** Fields
         *********/
         /// <summary>The SMAPI events available for mods.</summary>
-        private readonly IModEvents Events;
+        private readonly IModEvents _events;
 
         /// <summary>An API for checking and changing input state.</summary>
         protected readonly IInputHelper InputHelper;
 
         /// <summary>The last viewport bounds.</summary>
-        private Rectangle LastViewport;
+        private Rectangle _lastViewport;
 
         /// <summary>Indicates whether to keep the overlay active. If <c>null</c>, the overlay is kept until explicitly disposed.</summary>
-        private readonly Func<bool> KeepAliveCheck;
+        private readonly Func<bool> _keepAliveCheck;
 
 
         /*********
@@ -36,11 +36,11 @@ namespace ConvenientChests.CategorizeChests.Interface
         /// <summary>Release all resources.</summary>
         public virtual void Dispose()
         {
-            this.Events.Display.RenderedActiveMenu -= this.OnRendered;
-            this.Events.GameLoop.UpdateTicked -= this.OnUpdateTicked;
-            this.Events.Input.ButtonPressed -= this.OnButtonPressed;
-            this.Events.Input.CursorMoved -= this.OnCursorMoved;
-            this.Events.Input.MouseWheelScrolled -= this.OnMouseWheelScrolled;
+            _events.Display.RenderedActiveMenu -= OnRendered;
+            _events.GameLoop.UpdateTicked -= OnUpdateTicked;
+            _events.Input.ButtonPressed -= OnButtonPressed;
+            _events.Input.CursorMoved -= OnCursorMoved;
+            _events.Input.MouseWheelScrolled -= OnMouseWheelScrolled;
         }
 
 
@@ -56,16 +56,16 @@ namespace ConvenientChests.CategorizeChests.Interface
         /// <param name="keepAlive">Indicates whether to keep the overlay active. If <c>null</c>, the overlay is kept until explicitly disposed.</param>
         protected InterfaceHost(IModEvents events, IInputHelper inputHelper, Func<bool> keepAlive = null)
         {
-            this.Events = events;
-            this.InputHelper = inputHelper;
-            this.KeepAliveCheck = keepAlive;
-            this.LastViewport = new Rectangle(Game1.viewport.X, Game1.viewport.Y, Game1.viewport.Width, Game1.viewport.Height);
+            _events = events;
+            InputHelper = inputHelper;
+            _keepAliveCheck = keepAlive;
+            _lastViewport = new Rectangle(Game1.viewport.X, Game1.viewport.Y, Game1.viewport.Width, Game1.viewport.Height);
 
-            events.Display.RenderedActiveMenu += this.OnRendered;
-            events.GameLoop.UpdateTicked += this.OnUpdateTicked;
-            events.Input.ButtonPressed += this.OnButtonPressed;
-            events.Input.CursorMoved += this.OnCursorMoved;
-            events.Input.MouseWheelScrolled += this.OnMouseWheelScrolled;
+            events.Display.RenderedActiveMenu += OnRendered;
+            events.GameLoop.UpdateTicked += OnUpdateTicked;
+            events.Input.ButtonPressed += OnButtonPressed;
+            events.Input.CursorMoved += OnCursorMoved;
+            events.Input.MouseWheelScrolled += OnMouseWheelScrolled;
         }
 
         /// <summary>Draw the overlay to the screen.</summary>
@@ -128,7 +128,7 @@ namespace ConvenientChests.CategorizeChests.Interface
         /// <param name="e">The event arguments.</param>
         private void OnRendered(object sender, RenderedActiveMenuEventArgs e)
         {
-            this.Draw(Game1.spriteBatch);
+            Draw(Game1.spriteBatch);
         }
 
         /// <summary>The method called once per event tick.</summary>
@@ -137,19 +137,19 @@ namespace ConvenientChests.CategorizeChests.Interface
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
             // detect end of life
-            if (this.KeepAliveCheck != null && !this.KeepAliveCheck())
+            if (_keepAliveCheck != null && !_keepAliveCheck())
             {
-                this.Dispose();
+                Dispose();
                 return;
             }
 
             // trigger window resize event
             Rectangle newViewport = Game1.viewport;
-            if (this.LastViewport.Width != newViewport.Width || this.LastViewport.Height != newViewport.Height)
+            if (_lastViewport.Width != newViewport.Width || _lastViewport.Height != newViewport.Height)
             {
                 newViewport = new Rectangle(newViewport.X, newViewport.Y, newViewport.Width, newViewport.Height);
-                this.ReceiveGameWindowResized(this.LastViewport, newViewport);
-                this.LastViewport = newViewport;
+                ReceiveGameWindowResized(_lastViewport, newViewport);
+                _lastViewport = newViewport;
             }
         }
 
@@ -159,11 +159,11 @@ namespace ConvenientChests.CategorizeChests.Interface
         private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
         {
             bool handled = e.Button == SButton.MouseLeft || e.Button.IsUseToolButton()
-                ? this.ReceiveLeftClick(Game1.getMouseX(), Game1.getMouseY())
-                : this.ReceiveButtonPress(e.Button);
+                ? ReceiveLeftClick(Game1.getMouseX(), Game1.getMouseY())
+                : ReceiveButtonPress(e.Button);
 
             if (handled)
-                this.InputHelper.Suppress(e.Button);
+                InputHelper.Suppress(e.Button);
         }
 
         /// <summary>The method invoked when the mouse wheel is scrolled.</summary>
@@ -171,7 +171,7 @@ namespace ConvenientChests.CategorizeChests.Interface
         /// <param name="e">The event arguments.</param>
         private void OnMouseWheelScrolled(object sender, MouseWheelScrolledEventArgs e)
         {
-            bool scrollHandled = this.ReceiveScrollWheelAction(e.Delta);
+            bool scrollHandled = ReceiveScrollWheelAction(e.Delta);
             if (scrollHandled)
             {
                 MouseState cur = Game1.oldMouseState;
@@ -196,7 +196,7 @@ namespace ConvenientChests.CategorizeChests.Interface
             int x = (int)e.NewPosition.ScreenPixels.X;
             int y = (int)e.NewPosition.ScreenPixels.Y;
 
-            bool hoverHandled = this.ReceiveCursorHover(x, y);
+            bool hoverHandled = ReceiveCursorHover(x, y);
             if (hoverHandled)
             {
                 MouseState cur = Game1.oldMouseState;

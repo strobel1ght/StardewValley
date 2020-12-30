@@ -1,14 +1,12 @@
 using System.Collections.Generic;
-using System.Linq;
 using ConvenientChests.CategorizeChests.Framework;
-using Microsoft.Xna.Framework;
 using StardewValley;
 using StardewValley.Objects;
 using StardewValley.Tools;
 
 namespace ConvenientChests.CategorizeChests {
     internal static class ItemHelper {
-        public static ItemKey ToItemKey(this Item item) => new ItemKey(GetItemType(item), GetItemID(item));
+        public static ItemKey ToItemKey(this Item item) => new ItemKey(GetItemType(item), GetItemId(item));
 
         public static Item GetCopy(this Item item) {
             if (item == null)
@@ -75,7 +73,7 @@ namespace ConvenientChests.CategorizeChests {
             return ItemType.Object;
         }
 
-        public static int GetItemID(Item item) {
+        public static int GetItemId(Item item) {
             switch (item) {
                 case Boots a:
                     return a.indexInTileSheet.Value;

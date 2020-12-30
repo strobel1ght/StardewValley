@@ -32,7 +32,7 @@ namespace ConvenientChests.CategorizeChests {
             IsActive = true;
 
             // Menu Events
-            this.Events.Display.MenuChanged += OnMenuChanged;
+            Events.Display.MenuChanged += OnMenuChanged;
 
             if (Context.IsMultiplayer && !Context.IsMainPlayer) {
                 ModEntry.Log("Due to limitations in the network code, CHEST CATEGORIES CAN NOT BE SAVED as farmhand, sorry :(", LogLevel.Warn);
@@ -41,7 +41,7 @@ namespace ConvenientChests.CategorizeChests {
 
             // Save Events
             SaveManager                 =  new SaveManager(ModEntry.ModManifest.Version, this);
-            this.Events.GameLoop.Saving += OnSaving;
+            Events.GameLoop.Saving += OnSaving;
             OnGameLoaded();
         }
 
@@ -49,10 +49,10 @@ namespace ConvenientChests.CategorizeChests {
             IsActive = false;
 
             // Menu Events
-            this.Events.Display.MenuChanged -= OnMenuChanged;
+            Events.Display.MenuChanged -= OnMenuChanged;
 
             // Save Events
-            this.Events.GameLoop.Saving -= OnSaving;
+            Events.GameLoop.Saving -= OnSaving;
         }
 
         /// <summary>Raised before the game begins writes data to the save file (except the initial save creation).</summary>
@@ -97,7 +97,7 @@ namespace ConvenientChests.CategorizeChests {
             if (!(itemGrabMenu.context is Chest chest))
                 return;
  
-            WidgetHost = new WidgetHost(this.Events, this.ModEntry.Helper.Input);
+            WidgetHost = new WidgetHost(Events, ModEntry.Helper.Input);
             var overlay = new ChestOverlay(this, chest, itemGrabMenu, WidgetHost.TooltipManager);
             WidgetHost.RootWidget.AddChild(overlay);
         }

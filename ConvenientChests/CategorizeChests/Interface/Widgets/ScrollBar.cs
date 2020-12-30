@@ -8,7 +8,7 @@ using StardewValley.Menus;
 
 namespace ConvenientChests.CategorizeChests.Interface.Widgets {
     public class ScrollBar : Widget {
-        private ScrollBarRunner Runner;
+        private ScrollBarRunner _runner;
 
         private int _scrollPosition;
 
@@ -21,12 +21,12 @@ namespace ConvenientChests.CategorizeChests.Interface.Widgets {
         }
 
 
-        private int scrollMax;
+        private int _scrollMax;
 
         public int ScrollMax {
-            get => scrollMax;
+            get => _scrollMax;
             set {
-                scrollMax = value;
+                _scrollMax = value;
                 UpdateScroller();
             }
         }
@@ -37,16 +37,16 @@ namespace ConvenientChests.CategorizeChests.Interface.Widgets {
 
         private SpriteButton ScrollUpButton   { get; }
         private SpriteButton ScrollDownButton { get; }
-        private Rectangle    ScrollBackground;
+        private Rectangle    _scrollBackground;
 
         public ScrollBar() {
             ScrollUpButton   = new SpriteButton(Sprites.UpArrow);
             ScrollDownButton = new SpriteButton(Sprites.DownArrow);
-            Runner           = new ScrollBarRunner {Width = 24};
+            _runner           = new ScrollBarRunner {Width = 24};
 
             AddChild(ScrollUpButton);
             AddChild(ScrollDownButton);
-            AddChild(Runner);
+            AddChild(_runner);
 
             PositionElements();
 
@@ -75,14 +75,14 @@ namespace ConvenientChests.CategorizeChests.Interface.Widgets {
             ScrollDownButton.X = 0;
             ScrollDownButton.Y = Height - ScrollDownButton.Height;
 
-            ScrollBackground.X      = 20;
-            ScrollBackground.Y      = ScrollUpButton.Height                                    - 4;
-            ScrollBackground.Height = Height - ScrollUpButton.Height - ScrollDownButton.Height + 8;
-            ScrollBackground.Width  = Runner.Width;
-            Runner.X                = ScrollBackground.X;
+            _scrollBackground.X      = 20;
+            _scrollBackground.Y      = ScrollUpButton.Height                                    - 4;
+            _scrollBackground.Height = Height - ScrollUpButton.Height - ScrollDownButton.Height + 8;
+            _scrollBackground.Width  = _runner.Width;
+            _runner.X                = _scrollBackground.X;
 
 
-            ScrollBackground.Location = Globalize(ScrollBackground.Location);
+            _scrollBackground.Location = Globalize(_scrollBackground.Location);
             UpdateScroller();
         }
 
@@ -90,8 +90,8 @@ namespace ConvenientChests.CategorizeChests.Interface.Widgets {
             if (Step == 0)
                 return;
 
-            Runner.Height = (int) (ScrollBackground.Height * (Step / (float) ScrollMax));
-            Runner.Y      = 60 + (int) ((ScrollBackground.Height - Runner.Height) * Math.Min(1, (ScrollPosition / (float) (ScrollMax - Step))));
+            _runner.Height = (int) (_scrollBackground.Height * (Step / (float) ScrollMax));
+            _runner.Y      = 60 + (int) ((_scrollBackground.Height - _runner.Height) * Math.Min(1, (ScrollPosition / (float) (ScrollMax - Step))));
         }
 
 
@@ -102,7 +102,7 @@ namespace ConvenientChests.CategorizeChests.Interface.Widgets {
             // draw background
             IClickableMenu.drawTextureBox(batch, Game1.mouseCursors,
                                           new Rectangle(403, 383, 6, 6),
-                                          ScrollBackground.X, ScrollBackground.Y, ScrollBackground.Width, ScrollBackground.Height,
+                                          _scrollBackground.X, _scrollBackground.Y, _scrollBackground.Width, _scrollBackground.Height,
                                           Color.White, 4f, false);
 
             base.Draw(batch);
@@ -118,15 +118,15 @@ namespace ConvenientChests.CategorizeChests.Interface.Widgets {
         }
 
 
-        protected bool _scrolling = false;
+        protected bool Scrolling;
 
         public override bool ReceiveLeftClick(Point point) {
             if (base.ReceiveLeftClick(point))
                 return true;
 
-            var localPoint = new Point(point.X - Runner.Position.X, point.Y - Runner.Position.Y);
-            if (Runner.LocalBounds.Contains(localPoint))
-                _scrolling = true;
+            var localPoint = new Point(point.X - _runner.Position.X, point.Y - _runner.Position.Y);
+            if (_runner.LocalBounds.Contains(localPoint))
+                Scrolling = true;
 
 
             return true;
@@ -136,11 +136,11 @@ namespace ConvenientChests.CategorizeChests.Interface.Widgets {
         /// Update ScrollRunner position and dispatch scrolling events
         /// </summary>
         private void GameLoopOnUpdateTicked(object sender, UpdateTickedEventArgs e) {
-            if (!_scrolling)
+            if (!Scrolling)
                 return;
 
             var mouseY   = Game1.getMouseY();
-            var progress = Math.Min(Math.Max(0f, mouseY - ScrollBackground.Y) / (Height), 1);
+            var progress = Math.Min(Math.Max(0f, mouseY - _scrollBackground.Y) / (Height), 1);
             ScrollPosition = (int) (progress * ScrollMax);
 
             OnScroll?.Invoke(this, new ScrollBarEventArgs(ScrollPosition, mouseY < GlobalBounds.Y ? -1 : 1));
@@ -150,8 +150,8 @@ namespace ConvenientChests.CategorizeChests.Interface.Widgets {
         /// Cancel scrolling on button release
         /// </summary>
         private void InputOnButtonReleased(object sender, ButtonReleasedEventArgs e) {
-            if (_scrolling && (e.Button == SButton.MouseLeft || e.Button.IsUseToolButton()))
-                _scrolling = false;
+            if (Scrolling && (e.Button == SButton.MouseLeft || e.Button.IsUseToolButton()))
+                Scrolling = false;
         }
 
 

@@ -10,27 +10,27 @@ using StardewValley.Objects;
 
 namespace ConvenientChests.CraftFromChests {
     public class CraftFromChestsModule : Module {
-        private readonly MenuListener MenuListener;
+        private readonly MenuListener _menuListener;
 
 
         public CraftFromChestsModule(ModEntry modEntry) : base(modEntry) {
-            MenuListener = new MenuListener(Events);
+            _menuListener = new MenuListener(Events);
         }
 
         public override void Activate() {
             IsActive = true;
 
             // Register Events
-            MenuListener.RegisterEvents();
-            MenuListener.CraftingMenuShown += CraftingMenuShown;
+            _menuListener.RegisterEvents();
+            _menuListener.CraftingMenuShown += CraftingMenuShown;
         }
 
         public override void Deactivate() {
             IsActive = false;
 
             // Unregister Events
-            MenuListener.CraftingMenuShown -= CraftingMenuShown;
-            MenuListener.UnregisterEvents();
+            _menuListener.CraftingMenuShown -= CraftingMenuShown;
+            _menuListener.UnregisterEvents();
         }
 
         private void CraftingMenuShown(object sender, EventArgs e) {

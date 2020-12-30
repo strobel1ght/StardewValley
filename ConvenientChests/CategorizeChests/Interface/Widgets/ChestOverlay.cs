@@ -3,7 +3,6 @@ using ConvenientChests.StashToChests;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Characters;
 using StardewValley.Menus;
 using StardewValley.Objects;
 
@@ -14,9 +13,9 @@ namespace ConvenientChests.CategorizeChests.Interface.Widgets {
         private Chest                  Chest          { get; }
         private ITooltipManager        TooltipManager { get; }
 
-        private readonly InventoryMenu                   InventoryMenu;
-        private readonly InventoryMenu.highlightThisItem DefaultChestHighlighter;
-        private readonly InventoryMenu.highlightThisItem DefaultInventoryHighlighter;
+        private readonly InventoryMenu                   _inventoryMenu;
+        private readonly InventoryMenu.highlightThisItem _defaultChestHighlighter;
+        private readonly InventoryMenu.highlightThisItem _defaultInventoryHighlighter;
 
         private TextButton   OpenButton   { get; set; }
         private TextButton   StashButton  { get; set; }
@@ -26,11 +25,11 @@ namespace ConvenientChests.CategorizeChests.Interface.Widgets {
             Module         = module;
             Chest          = chest;
             ItemGrabMenu   = menu;
-            InventoryMenu  = menu.ItemsToGrabMenu;
+            _inventoryMenu  = menu.ItemsToGrabMenu;
             TooltipManager = tooltipManager;
 
-            DefaultChestHighlighter     = ItemGrabMenu.inventory.highlightMethod;
-            DefaultInventoryHighlighter = InventoryMenu.highlightMethod;
+            _defaultChestHighlighter     = ItemGrabMenu.inventory.highlightMethod;
+            _defaultInventoryHighlighter = _inventoryMenu.highlightMethod;
 
             AddButtons();
         }
@@ -117,12 +116,12 @@ namespace ConvenientChests.CategorizeChests.Interface.Widgets {
 
         private void SetItemsClickable(bool clickable) {
             if (clickable) {
-                ItemGrabMenu.inventory.highlightMethod = DefaultChestHighlighter;
-                InventoryMenu.highlightMethod          = DefaultInventoryHighlighter;
+                ItemGrabMenu.inventory.highlightMethod = _defaultChestHighlighter;
+                _inventoryMenu.highlightMethod          = _defaultInventoryHighlighter;
             }
             else {
                 ItemGrabMenu.inventory.highlightMethod = i => false;
-                InventoryMenu.highlightMethod          = i => false;
+                _inventoryMenu.highlightMethod          = i => false;
             }
         }
     }

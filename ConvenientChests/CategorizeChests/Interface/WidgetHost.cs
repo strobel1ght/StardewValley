@@ -15,7 +15,7 @@ namespace ConvenientChests.CategorizeChests.Interface
         public WidgetHost(IModEvents events, IInputHelper input)
             : base(events, input)
         {
-            RootWidget = new Widget() {Width = Game1.viewport.Width, Height = Game1.viewport.Height};
+            RootWidget = new Widget {Width = Game1.viewport.Width, Height = Game1.viewport.Height};
             TooltipManager = new TooltipManager();
         }
 

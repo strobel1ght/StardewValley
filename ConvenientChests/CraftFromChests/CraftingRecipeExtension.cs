@@ -1,13 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewValley;
 
 namespace ConvenientChests.CraftFromChests {
     public static class CraftingRecipeExtension {
-        public static Dictionary<int, int> GetIngredients(this CraftingRecipe recipe)
+        private static Dictionary<int, int> GetIngredients(this CraftingRecipe recipe)
             => ModEntry.StaticHelper.Reflection.GetField<Dictionary<int, int>>(recipe, "recipeList").GetValue();
 
         public static bool ConsumeIngredients(this CraftingRecipe recipe, IList<IList<Item>> extraInventories) {
@@ -25,8 +22,7 @@ namespace ConvenientChests.CraftFromChests {
                     if (count <= 0) goto NEXT_ITEM;
                 }
 
-                if (count > 0)
-                    ModEntry.Log($"\tOnly found {i.Value - count} / {count} of {i.Key}", LogLevel.Warn);
+                ModEntry.Log($"\tOnly found {i.Value - count} / {count} of {i.Key}", LogLevel.Warn);
 
                 NEXT_ITEM:;
             }

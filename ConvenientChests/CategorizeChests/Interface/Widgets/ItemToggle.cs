@@ -1,5 +1,4 @@
 using System;
-using ConvenientChests.CategorizeChests.Framework;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;

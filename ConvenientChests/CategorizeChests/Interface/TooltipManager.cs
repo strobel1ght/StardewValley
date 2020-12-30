@@ -7,27 +7,27 @@ namespace ConvenientChests.CategorizeChests.Interface
 {
     class TooltipManager : ITooltipManager
     {
-        private Widget Tooltip;
+        private Widget _tooltip;
 
         public void ShowTooltipThisFrame(Widget tooltip)
         {
-            Tooltip = tooltip;
+            _tooltip = tooltip;
         }
 
         public void Draw(SpriteBatch batch)
         {
-            if (Tooltip != null)
+            if (_tooltip != null)
             {
                 var mousePosition = Game1.getMousePosition();
 
-                Tooltip.Position = new Point(
+                _tooltip.Position = new Point(
                     mousePosition.X + 8 * Game1.pixelZoom,
                     mousePosition.Y + 8 * Game1.pixelZoom
                 );
 
-                Tooltip.Draw(batch);
+                _tooltip.Draw(batch);
 
-                Tooltip = null;
+                _tooltip = null;
             }
         }
     }

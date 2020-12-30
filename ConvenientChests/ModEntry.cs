@@ -62,7 +62,7 @@ namespace ConvenientChests {
         }
 
         public override object GetApi() {
-            return new ModAPI();
+            return new ModApi();
         }
     }
 }

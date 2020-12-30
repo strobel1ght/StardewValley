@@ -14,13 +14,13 @@ namespace ConvenientChests.CategorizeChests.Framework
     /// </summary>
     class Saver
     {
-        private readonly ISemanticVersion Version;
-        private readonly IChestDataManager ChestDataManager;
+        private readonly ISemanticVersion _version;
+        private readonly IChestDataManager _chestDataManager;
 
         public Saver(ISemanticVersion version, IChestDataManager chestDataManager)
         {
-            Version = version;
-            ChestDataManager = chestDataManager;
+            _version = version;
+            _chestDataManager = chestDataManager;
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace ConvenientChests.CategorizeChests.Framework
         {
             return new SaveData
             {
-                Version = Version.ToString(),
+                Version = _version.ToString(),
                 ChestEntries = BuildChestEntries()
             };
         }
@@ -42,7 +42,7 @@ namespace ConvenientChests.CategorizeChests.Framework
                 // chests
                 foreach (var pair in GetLocationChests(location))
                     yield return new ChestEntry(
-                        ChestDataManager.GetChestData(pair.Value),
+                        _chestDataManager.GetChestData(pair.Value),
                         new ChestAddress(location.Name, pair.Key)
                     );
 
@@ -53,7 +53,7 @@ namespace ConvenientChests.CategorizeChests.Framework
                         foreach (var building in buildableLocation.buildings.Where(b => b.indoors.Value != null))
                         foreach (var pair in GetLocationChests(building.indoors.Value))
                             yield return new ChestEntry(
-                                ChestDataManager.GetChestData(pair.Value),
+                                _chestDataManager.GetChestData(pair.Value),
                                 new ChestAddress(location.Name, pair.Key, ChestLocationType.Building, building.nameOfIndoors)
                             );
                         break;
@@ -61,7 +61,7 @@ namespace ConvenientChests.CategorizeChests.Framework
                     // fridges
                     case FarmHouse farmHouse when farmHouse.upgradeLevel >= 1:
                         yield return new ChestEntry(
-                            ChestDataManager.GetChestData(farmHouse.fridge.Value),
+                            _chestDataManager.GetChestData(farmHouse.fridge.Value),
                             new ChestAddress {LocationName = farmHouse.uniqueName?.Value ?? farmHouse.Name, LocationType = ChestLocationType.Refrigerator}
                            );
                         break;

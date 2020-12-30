@@ -17,7 +17,7 @@ namespace ConvenientChests.StashToChests {
             AcceptingFunction = CreateAcceptingFunction();
 
             // Events
-            this.Events.Input.ButtonPressed += OnButtonPressed;
+            Events.Input.ButtonPressed += OnButtonPressed;
         }
 
         private StackLogic.AcceptingFunction CreateAcceptingFunction() {
@@ -37,7 +37,7 @@ namespace ConvenientChests.StashToChests {
             IsActive = false;
 
             // Events
-            this.Events.Input.ButtonPressed -= OnButtonPressed;
+            Events.Input.ButtonPressed -= OnButtonPressed;
         }
 
         private void TryStashNearby() {

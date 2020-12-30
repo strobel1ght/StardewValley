@@ -34,12 +34,12 @@ namespace ConvenientChests.StashToChests {
             CategorizedAcceptingFunction    = CreateCategorizedAcceptingFunction();
             ExistingStacksAcceptingFunction = CreateExistingStacksAcceptingFunction();
 
-            this.Events.Input.ButtonPressed += OnButtonPressed;
+            Events.Input.ButtonPressed += OnButtonPressed;
         }
 
         public override void Deactivate() {
             IsActive                        =  false;
-            this.Events.Input.ButtonPressed -= OnButtonPressed;
+            Events.Input.ButtonPressed -= OnButtonPressed;
         }
 
         private void StashGlobally() {

@@ -6,12 +6,12 @@ namespace ConvenientChests.CategorizeChests.Framework.Persistence {
     /// The class responsible for saving and loading the mod state.
     /// </summary>
     class SaveManager : ISaveManager {
-        private readonly CategorizeChestsModule Module;
-        private readonly ISemanticVersion       Version;
+        private readonly CategorizeChestsModule _module;
+        private readonly ISemanticVersion       _version;
 
         public SaveManager(ISemanticVersion version, CategorizeChestsModule module) {
-            Version = version;
-            Module  = module;
+            _version = version;
+            _module  = module;
         }
 
         /// <summary>
@@ -19,8 +19,8 @@ namespace ConvenientChests.CategorizeChests.Framework.Persistence {
         /// </summary>
         /// <param name="relativePath">The path of the save file relative to the mod folder.</param>
         public void Save(string relativePath) {
-            var saver = new Saver(Version, Module.ChestDataManager);
-            Module.ModEntry.Helper.Data.WriteJsonFile(relativePath, saver.GetSerializableData());
+            var saver = new Saver(_version, _module.ChestDataManager);
+            _module.ModEntry.Helper.Data.WriteJsonFile(relativePath, saver.GetSerializableData());
         }
 
         /// <summary>
@@ -28,19 +28,19 @@ namespace ConvenientChests.CategorizeChests.Framework.Persistence {
         /// </summary>
         /// <param name="relativePath">The path of the save file relative to the mod folder.</param>
         public void Load(string relativePath) {
-            var model = Module.ModEntry.Helper.Data.ReadJsonFile<SaveData>(relativePath) ?? new SaveData();
+            var model = _module.ModEntry.Helper.Data.ReadJsonFile<SaveData>(relativePath) ?? new SaveData();
 
             foreach (var entry in model.ChestEntries) {
                 try {
-                    var chest     = Module.ChestFinder.GetChestByAddress(entry.Address);
-                    var chestData = Module.ChestDataManager.GetChestData(chest);
+                    var chest     = _module.ChestFinder.GetChestByAddress(entry.Address);
+                    var chestData = _module.ChestDataManager.GetChestData(chest);
 
                     chestData.AcceptedItemKinds = entry.GetItemSet();
-                    foreach (var key in chestData.AcceptedItemKinds.Where(k => !Module.ItemDataManager.Prototypes.ContainsKey(k)))
-                        Module.ItemDataManager.Prototypes.Add(key, key.GetOne());
+                    foreach (var key in chestData.AcceptedItemKinds.Where(k => !_module.ItemDataManager.Prototypes.ContainsKey(k)))
+                        _module.ItemDataManager.Prototypes.Add(key, key.GetOne());
                 }
                 catch (InvalidSaveDataException e) {
-                    Module.Monitor.Log(e.Message, LogLevel.Warn);
+                    _module.Monitor.Log(e.Message, LogLevel.Warn);
                 }
             }
         }

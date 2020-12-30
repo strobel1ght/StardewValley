@@ -28,19 +28,19 @@ namespace ConvenientChests.CategorizeChests
                 yield return source.Current;
         }
 
-        public static IDictionary<Key, IEnumerable<Value>> KeyBy<Key, Value>(this IEnumerable<Value> values,
-            Func<Value, Key> makeKey)
+        public static IDictionary<TKey, IEnumerable<TValue>> KeyBy<TKey, TValue>(this IEnumerable<TValue> values,
+            Func<TValue, TKey> makeKey)
         {
-            var dict = new Dictionary<Key, IEnumerable<Value>>();
+            var dict = new Dictionary<TKey, IEnumerable<TValue>>();
 
             foreach (var value in values)
             {
                 var key = makeKey(value);
 
                 if (!dict.ContainsKey(key))
-                    dict[key] = new List<Value>();
+                    dict[key] = new List<TValue>();
 
-                ((List<Value>) dict[key]).Add(value);
+                ((List<TValue>) dict[key]).Add(value);
             }
 
             return dict;
